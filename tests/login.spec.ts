@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('test', async ({ page }) => {
+test('Login Positive Test Case', async ({ page }) => {
   await page.goto('https://onlinelibrary.wiley.com/');
   await page.getByLabel('Log in or Register').click();
   await page.getByLabel('Email or Customer ID').fill('dimuthcbandara97@gmail.com');
