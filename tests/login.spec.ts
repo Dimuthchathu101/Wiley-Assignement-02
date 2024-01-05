@@ -7,7 +7,8 @@ const PASSWORD = 'Enter your password'
 
 
 // Login Positvie Test Cases
-test.only('Login Positive Test Case', async ({ page }) => {
+test('Login Positive Test Case', async ({ page }) => {
+
    
   await page.goto(baseUrl);
   const loggedInUrl = await page.url();
