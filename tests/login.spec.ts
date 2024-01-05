@@ -1,11 +1,24 @@
 import { test, expect } from '@playwright/test';
 
-test('Login Positive Test Case', async ({ page }) => {
-  await page.goto('https://onlinelibrary.wiley.com/');
-  await page.getByLabel('Log in or Register').click();
-  await page.getByLabel('Email or Customer ID').fill('dimuthcbandara97@gmail.com');
-  await page.getByPlaceholder('Enter your password').click();
-  await page.getByPlaceholder('Enter your password').click();
-  await page.getByPlaceholder('Enter your password').fill('##AAbbccdd11223344');
+const baseUrl = process.env.BASE_URL || 'https://onlinelibrary.wiley.com/'
+const LOGIN_REGISTER = 'Log in or Register'
+const EMAIL = 'Email or Customer ID'
+const PASSWORD = 'Enter your password'
+
+test.only('Login Positive Test Case', async ({ page }) => {
+  await page.goto(baseUrl);
+  await page.getByLabel(LOGIN_REGISTER).click();
+  await page.getByLabel(EMAIL).fill('dimuthcbandara97@gmail.com');
+  await page.getByPlaceholder(PASSWORD).click();
+  await page.getByPlaceholder(PASSWORD).fill('##AAbbccdd11223344');
+  await page.getByRole('button', { name: 'Log In' }).click();
+});
+
+test('Login Negative Test Case', async ({ page }) => {
+  await page.goto(baseUrl);
+  await page.getByLabel(LOGIN_REGISTER).click();
+  await page.getByLabel(EMAIL).fill('helloworld@something.com');
+  await page.getByPlaceholder(PASSWORD).click();
+  await page.getByPlaceholder(PASSWORD).fill('##AAkl');
   await page.getByRole('button', { name: 'Log In' }).click();
 });

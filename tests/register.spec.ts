@@ -1,14 +1,18 @@
 import { test, expect } from '@playwright/test';
 
+const baseUrl = process.env.BASE_URL || 'https://onlinelibrary.wiley.com/'
+const LOGIN_REGISTER = 'Log in or Register'
+const EMAIL = 'A one-time confirmation email'
+const RETYPE_EMAIL = 'Retype email*'
 
-test('Register an Account', async ({ page }) => {
-  await page.goto('https://onlinelibrary.wiley.com/');
-  await page.getByLabel('Log in or Register').click();
+test('Register an Account Positive Test Cases', async ({ page }) => {
+  await page.goto(baseUrl);
+  await page.getByLabel(LOGIN_REGISTER).click();
   await page.getByRole('link', { name: 'NEW USER' }, ).click();
-  await page.getByLabel('A one-time confirmation email').click();
-  await page.getByLabel('A one-time confirmation email').fill('dimuthchathu@gmail.com');
-  await page.getByLabel('Retype email*').click();
-  await page.getByLabel('Retype email*').fill('dimuthchathu@gmail.com');
+  await page.getByLabel(EMAIL).click();
+  await page.getByLabel(EMAIL).fill('dimuthchathu@gmail.com');
+  await page.getByLabel(RETYPE_EMAIL).click();
+  await page.getByLabel(RETYPE_EMAIL).fill('dimuthchathu@gmail.com');
   await page.getByPlaceholder('Type your password', { exact: true }).click();
   await page.getByPlaceholder('Type your password', { exact: true }).fill('##Abcd12344');
   await page.getByPlaceholder('Re-type your password').click();
