@@ -14,6 +14,7 @@ const NEWSLETTER = 'Yes, please sign me up for';
 const ACCEPT_TERMS = 'I have read and accept the';
 const NOT_A_ROBOT = 'iframe[name="a-ve19zp2h3y3q"]'
 
+// Positvie Test Cases for Register an Account
 test.only('Register an Account Positive Test Cases', async ({ page }) => {
   await page.goto(baseUrl);
   await page.getByLabel(LOGIN_REGISTER).click();
@@ -36,8 +37,11 @@ test.only('Register an Account Positive Test Cases', async ({ page }) => {
   await page.getByText(ACCEPT_TERMS).click();
   await page.frameLocator(NOT_A_ROBOT).getByLabel('I\'m not a robot').click();
   await page.getByRole('button', { name: 'REGISTER', exact: true }).click();
+
+  expect("//h4[normalize-space()='Your registration is almost complete.']").toContain("Your registration is almost complete")
 });
 
+// Register an Account Negative Test Case
 test('Register an Account Negative Test Cases', async ({ page }) => {
   await page.goto(baseUrl);
   await page.getByLabel(LOGIN_REGISTER).click();
@@ -57,4 +61,7 @@ test('Register an Account Negative Test Cases', async ({ page }) => {
   await page.getByText(NEWSLETTER).click();
   await page.getByText(ACCEPT_TERMS).click();
   await page.getByRole('button', { name: 'REGISTER', exact: true }).click();
+
+  expect("//h4[normalize-space()='Your registration is almost complete.']").toContain("Some Other Text")
+  
 });
