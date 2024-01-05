@@ -14,6 +14,16 @@ test.only('Login Positive Test Case', async ({ page }) => {
   await page.getByRole('button', { name: 'Log In' }).click();
 });
 
+
+test('Forget Password Positve Test Case', async ({ page }) => {
+  await page.goto(baseUrl);
+  await page.getByLabel(LOGIN_REGISTER).click();
+  await page.getByRole('link', { name: 'Forgot password?' }).click();
+  await page.getByRole('textbox', { name: 'Email', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Email', exact: true }).fill('dimuthcbandara97@gmail.com');
+  await page.getByRole('button', { name: 'RESET PASSWORD' }).click();
+});
+
 test('Login Negative Test Case', async ({ page }) => {
   await page.goto(baseUrl);
   await page.getByLabel(LOGIN_REGISTER).click();
@@ -21,4 +31,13 @@ test('Login Negative Test Case', async ({ page }) => {
   await page.getByPlaceholder(PASSWORD).click();
   await page.getByPlaceholder(PASSWORD).fill('##AAkl');
   await page.getByRole('button', { name: 'Log In' }).click();
+});
+
+test('Forget Password Negative Test Case', async ({ page }) => {
+  await page.goto(baseUrl);
+  await page.getByLabel(LOGIN_REGISTER).click();
+  await page.getByRole('link', { name: 'Forgot password?' }).click();
+  await page.getByRole('textbox', { name: 'Email', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Email', exact: true }).fill('hello900@gmail.com');
+  await page.getByRole('button', { name: 'RESET PASSWORD' }).click();
 });
