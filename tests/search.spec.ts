@@ -9,4 +9,5 @@ test('has title', async ({ page }) => {
   await page.goto(baseUrl);
 
   await page.locator(SEARCHBOX).fill("Hello World", { timeout: 1000 });
+  
 });
