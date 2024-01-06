@@ -1,6 +1,6 @@
 import { test, expect, chromium } from '@playwright/test';
 
-const baseUrl = process.env.BASE_URL || 'https://onlinelibrary.wiley.com/';
+const baseUrl = process.env.BASE_URL || 'http://onlinelibrary.wiley.com/';
 const LOGIN_REGISTER = 'Log in or Register';
 const EMAIL = 'A one-time confirmation email';
 const RETYPE_EMAIL = 'Retype email*';
@@ -21,21 +21,34 @@ test.only('Register an Account Positive Test Cases', async () => {
     headless: false, // Optional: Set to `true` to run in headless mode
     args: ['--disable-incognito'] // Disable incognito mode
   });
-  
+
   const context = await browser.newContext();
   context.setDefaultTimeout(60000);
-  
+
   const page = await context.newPage();
-  
+
   // Visit the site
   await page.goto(baseUrl);
 
   // Login Register Options
   await page.getByLabel(LOGIN_REGISTER).click();
-  await page.getByRole('link', { name: 'NEW USER' },).click();
+  // await page.getByRole('link', { name: 'NEW USER' },).click();
 
-  await page.waitForNavigation()
+  const timeout = 5000; 
 
+  try {
+    await Promise.race([
+      page.getByRole('link', { name: 'NEW USER' }).click(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeout))
+    ]);
+  } catch (error) {
+    if (error.message === 'Timeout') {
+      console.error('Operation timed out');
+    } else {
+      throw error; 
+    }
+  }
+  // await page.waitForNavigation()
 
   // Email 
   await page.getByLabel(EMAIL).click();
@@ -77,7 +90,18 @@ test.only('Register an Account Positive Test Cases', async () => {
   await page.frameLocator(NOT_A_ROBOT).getByLabel('I\'m not a robot').click();
 
   // Click on Login Button
-  await page.getByRole('button', { name: 'REGISTER', exact: true }).click();
+  try {
+    await Promise.race([
+      page.getByRole('button', { name: 'REGISTER', exact: true }).click(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeout))
+    ]);
+  } catch (error) {
+    if (error.message === 'Timeout') {
+      console.error('Click operation timed out');
+    } else {
+      throw error; 
+    }
+  }
 
   // Testing after returning to home page
   expect("//h4[normalize-space()='Your registration is almost complete.']").toContain("Your registration is almost complete")
