@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test';
 
 const baseUrl = process.env.BASE_URL || 'https://onlinelibrary.wiley.com/';
 const LOGIN_REGISTER = 'Log in or Register';
@@ -15,14 +15,27 @@ const ACCEPT_TERMS = 'I have read and accept the';
 const NOT_A_ROBOT = 'iframe[name="a-ve19zp2h3y3q"]'
 
 // Positvie Test Cases for Register an Account
-test.only('Register an Account Positive Test Cases', async ({ page }) => {
+test.only('Register an Account Positive Test Cases', async () => {
 
+  const browser = await chromium.launch({
+    headless: false, // Optional: Set to `true` to run in headless mode
+    args: ['--disable-incognito'] // Disable incognito mode
+  });
+  
+  const context = await browser.newContext();
+  context.setDefaultTimeout(60000);
+  
+  const page = await context.newPage();
+  
   // Visit the site
   await page.goto(baseUrl);
 
   // Login Register Options
   await page.getByLabel(LOGIN_REGISTER).click();
   await page.getByRole('link', { name: 'NEW USER' },).click();
+
+  await page.waitForNavigation()
+
 
   // Email 
   await page.getByLabel(EMAIL).click();

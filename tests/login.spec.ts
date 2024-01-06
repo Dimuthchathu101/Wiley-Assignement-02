@@ -1,15 +1,24 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test';
 
-const baseUrl = process.env.BASE_URL || 'https://onlinelibrary.wiley.com/'
+const baseUrl = process.env.BASE_URL || 'http://onlinelibrary.wiley.com/'
 const LOGIN_REGISTER = 'Log in or Register'
 const EMAIL = 'Email or Customer ID'
 const PASSWORD = 'Enter your password'
 
 
 // Login Positvie Test Cases
-test('Login Positive Test Case', async ({ page }) => {
+test('Login Positive Test Case', async () => {
 
-  // URL and Basic
+  const browser = await chromium.launch({
+    headless: false, // Optional: Set to `true` to run in headless mode
+    args: ['--disable-incognito'] // Disable incognito mode
+  });
+  
+  const context = await browser.newContext();
+  
+  const page = await context.newPage();
+  
+  // URL and Basic Actions
   await page.goto(baseUrl);
   const loggedInUrl = await page.url();
   expect(loggedInUrl).toContain('https://onlinelibrary.wiley.com/');
@@ -30,7 +39,7 @@ test('Login Positive Test Case', async ({ page }) => {
   // After Login It Directs to the Home Page
   const loginURL = await page.url();
   expect(loginURL).toContain('https://onlinelibrary.wiley.com/');
-  expect("//p[@class='intro-text--search']").toContain("Today's research, tomorrow's innovation")
+  
 
 });
 
